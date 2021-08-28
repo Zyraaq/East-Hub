@@ -1,0 +1,609 @@
+if game.PlaceId == 1923555882 then
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+	local Window = Library.CreateLib("East Hub - Version 1.0.1", "Synapse")
+	--MAIN
+	local Main = Window:NewTab("Main")
+	local Visuals = Window:NewTab("Visuals")
+	local Server = Window:NewTab("Server")
+	local Toggles = Window:NewTab("Toggles")
+	local Teleport = Window:NewTab("Teleport")
+	local Info = Window:NewTab("Info")
+	local MiscSection = Main:NewSection("Main")
+	MiscSection:NewSlider("Walk Speed", "Changes Walk Speed.", 30, 9, function(s) -- 500 (MaxValue) | 0 (MinValue)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = s
+	end)
+	MiscSection:NewSlider("Jump Power", "Changes Jump Power.", 20, 50, function(s)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)-- 500 (MaxValue) | 0 (MinValue)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = s
+	end)
+	MiscSection:NewButton("Fly (N)", "With this you can Fly.", function(s)
+		repeat wait() 
+		until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:findFirstChild("Head") and game.Players.LocalPlayer.Character:findFirstChild("Humanoid") 
+		local mouse = game.Players.LocalPlayer:GetMouse() 
+		repeat wait() until mouse
+		local plr = game.Players.LocalPlayer 
+		local torso = plr.Character.Head 
+		local flying = false
+		local deb = true 
+		local ctrl = {f = 0, b = 0, l = 0, r = 0} 
+		local lastctrl = {f = 0, b = 0, l = 0, r = 0} 
+		local maxspeed = 8
+		local speed = 0.5
+
+		function Fly() 
+			local bg = Instance.new("BodyGyro", torso) 
+			bg.P = 9e4 
+			bg.maxTorque = Vector3.new(9e9, 9e9, 9e9) 
+			bg.cframe = torso.CFrame 
+			local bv = Instance.new("BodyVelocity", torso) 
+			bv.velocity = Vector3.new(0,0.1,0) 
+			bv.maxForce = Vector3.new(9e9, 9e9, 9e9) 
+			repeat wait() 
+				plr.Character.Humanoid.PlatformStand = true 
+				if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then 
+					speed = speed+.5+(speed/maxspeed) 
+					if speed > maxspeed then 
+						speed = maxspeed 
+					end 
+				elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then 
+					speed = speed-1 
+					if speed < 0 then 
+						speed = 0 
+					end 
+				end 
+				if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then 
+					bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed 
+					lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r} 
+				elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then 
+					bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed 
+				else 
+					bv.velocity = Vector3.new(0,0.1,0) 
+				end 
+				bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0) 
+			until not flying 
+			ctrl = {f = 0, b = 0, l = 0, r = 0} 
+			lastctrl = {f = 0, b = 0, l = 0, r = 0} 
+			speed = 0 
+			bg:Destroy() 
+			bv:Destroy() 
+			plr.Character.Humanoid.PlatformStand = false 
+		end 
+		mouse.KeyDown:connect(function(key) 
+			if key:lower() == "n" then 
+				if flying then flying = false 
+				else 
+					flying = true 
+					Fly() 
+				end 
+			elseif key:lower() == "w" then 
+				ctrl.f = 1 
+			elseif key:lower() == "s" then 
+				ctrl.b = -1 
+			elseif key:lower() == "a" then 
+				ctrl.l = -1 
+			elseif key:lower() == "d" then 
+				ctrl.r = 1 
+			end 
+		end) 
+		mouse.KeyUp:connect(function(key) 
+			if key:lower() == "w" then 
+				ctrl.f = 0 
+			elseif key:lower() == "s" then 
+				ctrl.b = 0 
+			elseif key:lower() == "a" then 
+				ctrl.l = 0 
+			elseif key:lower() == "d" then 
+				ctrl.r = 0 
+			end 
+		end)
+		Fly()
+		print("Clicked")
+	end)
+	MiscSection:NewButton("Unlimited Jump", "You will have Unlimited Jump.", function(s)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	MiscSection:NewButton("Aim Lock", "With this you get Aim Lock.", function(s)
+		loadstring(game:HttpGet("https://pastebin.com/raw/ygp8Enye"))()
+		print("Clicked")
+	end)
+	MiscSection:NewButton("Spin", "With this you Spin.", function(s)
+		-- Made by JackMcJagger15
+
+		power = 500 -- change this to make it more or less powerful
+
+		game:GetService('RunService').Stepped:connect(function()
+			game.Players.LocalPlayer.Character.Head.CanCollide = false
+			game.Players.LocalPlayer.Character.UpperTorso.CanCollide = false
+			game.Players.LocalPlayer.Character.LowerTorso.CanCollide = false
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false
+		end)
+		wait(.1)
+		local bambam = Instance.new("BodyThrust")
+		bambam.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+		bambam.Force = Vector3.new(power,0,power)
+		bambam.Location = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+		print("Clicked")
+	end)
+	--SERVER
+	local ServerSection = Server:NewSection("Server")
+	ServerSection:NewButton("Lag Server", "With this you Lag the Server.", function(s)
+		while true do
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			part = Instance.new("Part",workspace)
+			wait()
+		end
+		print("Clicked")
+	end)
+	ServerSection:NewButton("Auto Farm", "WIth this you Auto Farm.", function(s)
+		while true do
+			wait(2)
+			local args = {
+				[1] = "Apply",
+				[2] = {
+					["job_radius"] = 60,
+					["CanWork"] = true,
+					["indoor_job_point"] = workspace.JobPoints.PawnShopInterior,
+					["Workers"] = {},
+					["ID"] = "PawnGuy",
+					["job_point"] = workspace.JobPoints.PawnShop,
+					["MaxPositions"] = 2,
+					["Data"] = {
+						["EndTime"] = "20:00:00",
+						["JobDesc"] = "Sell items to customers. Very simple.",
+						["JobTitle"] = "Pawnshop Clerk",
+						["RequiredConstantWork"] = true,
+						["UniformShirt"] = 207402508,
+						["UniformPants"] = 4693281203,
+						["Commission"] = 0,
+						["StartTime"] = "10:00:00",
+						["BasePay"] = 110,
+						["JobRules"] = "Ask the customer what they are looking to buy, then pretend go in the back and Roleplay check the inventory. Then return and /finishservice, and they will be given a shop menu. From there whatever th"
+						---    ... "euy you will make 10% of it on commission."
+					}
+				}
+			}
+
+			game:GetService("ReplicatedStorage").Events.JobService:FireServer(unpack(args))
+		end
+		print("Clicked")
+	end)
+	ServerSection:NewButton("Anti Kick", "With this you will have Anti Kick. ", function(s)
+		local mt = getrawmetatable(game)
+		local old = mt.__namecall
+		local protect = newcclosure or protect_function
+
+		if not protect then
+			notify("Incompatible Exploit Warning", "Your exploit does not support protection against stack trace errors, resulting to fallback function")
+			protect = function(f) return f end
+		end
+
+		setreadonly(mt, false)
+		mt.__namecall = protect(function(self, ...)
+			local method = getnamecallmethod()
+			if method == "Kick" then
+				wait(9e9)
+				return
+			end
+			return old(self, ...)
+		end)
+		hookfunction(Players.LocalPlayer.Kick,protect(function() wait(9e9) end))
+		print("Clicked")
+	end)
+	ServerSection:NewButton("Anti Afk", "With this you get Anti Afk.", function(s)
+		wait(0.5)local ba=Instance.new("ScreenGui")
+		local ca=Instance.new("TextLabel")local da=Instance.new("Frame")
+		local _b=Instance.new("TextLabel")local ab=Instance.new("TextLabel")ba.Parent=game.CoreGui
+		local bb=game:service'VirtualUser'
+		game:service'Players'.LocalPlayer.Idled:connect(function()
+			bb:CaptureController()bb:ClickButton2(Vector2.new())
+			ab.Text="You went idle and ROBLOX tried to kick you but we reflected it!"wait(2)ab.Text="Script Re-Enabled"end)
+		print("Clicked")
+	end)
+	--TOGGLES
+	local TogglesSection = Toggles:NewSection("Toggles")
+	TogglesSection:NewToggle("Instant Respawn", "With this you will Instantly Respawn", function(s)
+		local players = game:GetService("Players")
+
+		players.CharacterAutoLoads = false
+
+		players.PlayerAdded:Connect(function(plr)
+			plr.CharacterAdded:Connect(function(char)
+				local humanoid = char.Humanoid
+				humanoid.Died:Connect(function()
+					plr:LoadCharacter()
+				end)
+			end)
+			plr:LoadCharacter()
+		end)
+		if state then
+			print("Toggle On")
+		else
+			print("Toggle Off")
+		end
+	end)
+	--Visuals
+	local VisualSection = Visuals:NewSection("Visuals")
+	VisualSection:NewButton("ESP", "With this you get ESP.", function(s)
+
+		ALLYCOLOR = {225,255,255}  	--//Color of the ESP  of people on the same team
+		ENEMYCOLOR =  {255,225,255} 	--//Color of the ESP  of people on NOT the same team
+		TRANSPARENCY = 0.5			--//Transparency of the ESP
+		HEALTHBAR_ACTIVATED = false 	--//Renders the Healthbar
+		--
+		--
+
+		--							
+
+		function createFlex()
+			-- -----------------------------------------------------------------------------------
+			--[VARIABLES] //Changing may result in Errors!
+			players = game:GetService("Players") --//Required for PF
+			faces = {"Front","Back","Bottom","Left","Right","Top"} --//Every possible Enum face
+			currentPlayer = nil --//Used for the Team-Check
+			lplayer = players.LocalPlayer --//The LocalPlayer
+			-- -----------------------------------------------------------------------------------
+			players.PlayerAdded:Connect(function(p)
+				currentPlayer = p
+				p.CharacterAdded:Connect(function(character) --//For when a new Player joins the game 
+					createESP(character)			
+				end)		
+			end)
+			-- -----------------------------------------------------------------------------------
+			function checkPart(obj)  if (obj:IsA("Part") or obj:IsA("MeshPart")) and obj.Name~="HumanoidRootPart" then return true end end --//Check if the Part is suitable 
+			-- -----------------------------------------------------------------------------------
+			function actualESP(obj) 
+
+				for i=0,5 do
+					surface = Instance.new("SurfaceGui",obj) --//Creates the SurfaceGui
+					surface.Face = Enum.NormalId[faces[i+1]] --//Adjusts the Face and chooses from the face table
+					surface.AlwaysOnTop = true
+
+					frame = Instance.new("Frame",surface)	--//Creates the viewable Frame
+					frame.Size = UDim2.new(1,0,1,0)
+					frame.BorderSizePixel = 0												
+					frame.BackgroundTransparency = TRANSPARENCY
+					if currentPlayer.Team == players.LocalPlayer.Team then --//Checks the Players Team
+						frame.BackgroundColor3 = Color3.new(ALLYCOLOR[1],ALLYCOLOR[2],ALLYCOLOR[3])	--//If in same Team											
+					else
+						frame.BackgroundColor3 = Color3.new(ENEMYCOLOR[1],ENEMYCOLOR[2],ENEMYCOLOR[3])	--//If in another Team
+					end
+
+				end
+			end
+			-- -----------------------------------------------------------------------------------
+			function createHealthbar(hrp) 
+				board =Instance.new("BillboardGui",hrp) --//Creates the BillboardGui with HumanoidRootPart as the Parent
+				board.Name = "total"
+				board.Size = UDim2.new(1,0,1,0)
+				board.StudsOffset = Vector3.new(3,1,0)
+				board.AlwaysOnTop = true
+
+				bar = Instance.new("Frame",board) --//Creates the red background
+				bar.BackgroundColor3 = Color3.new(255,0,0)
+				bar.BorderSizePixel = 0
+				bar.Size = UDim2.new(0.2,0,4,0)
+				bar.Name = "total2"
+
+				health = Instance.new("Frame",bar) --//Creates the changing green Frame
+				health.BackgroundColor3 = Color3.new(0,255,0)
+				health.BorderSizePixel = 0
+				health.Size = UDim2.new(1,0,hrp.Parent.Humanoid.Health/100,0)
+				hrp.Parent.Humanoid.Changed:Connect(function(property) --//Triggers when any Property changed
+					hrp.total.total2.Frame.Size = UDim2.new(1,0,hrp.Parent.Humanoid.Health/100,0) --//Adjusts the size of the green Frame								
+				end)
+			end
+			-- -----------------------------------------------------------------------------------
+			function createESP(c) --//Checks and calls the proper function
+				bugfix = c:WaitForChild("Head") --// *Used so the children of the character arent nil.
+				for i,v in pairs(c:GetChildren()) do
+					if checkPart(v) then
+						actualESP(v)
+					end
+				end
+				if HEALTHBAR_ACTIVATED then --//If the user decided to
+					createHealthbar(c:WaitForChild("HumanoidRootPart")) --//Calls the function of the creation
+				end
+			end
+			-- -----------------------------------------------------------------------------------
+			for i,people in pairs(players:GetChildren())do
+				if people ~= players.LocalPlayer then
+					currentPlayer = people
+					--//Used for Players already in the Game
+					createESP(people.Character)
+					people.CharacterAdded:Connect(function(character)
+						createESP(character)			
+					end)
+				end
+			end
+			-- -----------------------------------------------------------------------------------
+		end 
+
+		createFlex() 
+		print("Clicked")
+	end)
+	VisualSection:NewButton("HitBox Expander", "With this you get HitBox Expander.", function(s)
+		loadstring(game:HttpGet("http://gameovers.net/Scripts/Free/HitboxExpander/main.lua", true))()
+		print("Clicked")
+	end)
+	VisualSection:NewButton("Headless", "With this you are Headless.", function(s)
+		local char = game.Players.LocalPlayer.Character
+		char.Head.Transparency = 1
+
+		game.Workspace.LocalPlayers.LocalPlayer.Head.face:remove()
+		print("Clicked")
+	end)
+	--TELEPORT
+	local TeleportSection = Teleport:NewSection("Teleport")
+	TeleportSection:NewButton("Lit Fits", "Teleports you to Lit Fits.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-7.84768343, 3.64999986, 189.227585, -0.104764909, -1.23143366e-07, 0.994497001, -2.24541008e-09, 1, 1.23588222e-07, -0.994497001, 1.07146558e-08, -0.104764909)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.5)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Brickton Gas", "Teleports you to Brickton Gas.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-62.4567566, 3.94999981, 57.6176605, -0.132318184, 8.20818826e-08, 0.991207242, 2.65958117e-10, 1, -8.27745055e-08, -0.991207242, -1.06889502e-08, -0.132318184)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Brickton Bank", "Teleports you to Brickton Bank.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(406.752075, 5.4499979, -20.1918068, 0.997230589, -2.44038438e-05, -0.0743716732, 1.24426988e-05, 1, -0.000161292643, 0.0743716732, 0.000159920543, 0.997230589)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Salty Saloon", "Teleports you to Salty Saloon.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(161.019913, 3.64999986, 195.611526, 0.00560362404, -7.16721829e-08, 0.999984324, -3.08843262e-08, 1, 7.18463724e-08, -0.999984324, -3.12864437e-08, 0.00560362404)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Community Center", "Teleports you to Community Center.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-36.2002449, 3.64999986, 259.335846, -0.983202577, 3.6102013e-10, -0.182517588, 7.32464756e-09, 1, -3.74790829e-08, 0.182517588, -3.81864105e-08, -0.983202577)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Key Resource Employment Office", "Teleports you to Key Resource Employment Office.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(209.642761, 3.64999986, 286.461426, -0.0783130527, 2.36001227e-08, -0.996928811, -2.29040453e-09, 1, 2.38527473e-08, 0.996928811, 4.15135171e-09, -0.0783130527)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Venue NightClub", "Teleports you to Venue Nightclub.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(319.360168, 3.64999986, 326.358948, -0.131557181, -7.58145049e-08, 0.99130857, 1.54281088e-09, 1, 7.66839676e-08, -0.99130857, 1.16177281e-08, -0.131557181)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("East Brickton Gun Club", "Teleports you to East Brickton Gun Club.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-122.265282, 3.64997292, 400.898682, 0.74912113, -5.31015454e-09, -0.662432969, 1.34302924e-09, 1, -6.49735554e-09, 0.662432969, 3.97764044e-09, 0.74912113)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Mini Mart", "Teleports you to Mini Mart.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-159.472687, 3.64999986, 5.02731609, 0.990602851, 8.03002909e-09, 0.13676928, -5.00817388e-09, 1, -2.24386429e-08, -0.13676928, 2.15428191e-08, 0.990602851)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Boyd's Barbershop", "Teleports you to Boyd's Barbershop.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(13.6324167, 3.64999986, -90.5622406, 0.0411916114, 7.59671153e-08, -0.999151289, 5.66166847e-08, 1, 7.83657654e-08, 0.999151289, -5.97966476e-08, 0.0411916114)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Broadway Apartments", "Teleports you to Broadway Apartments.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(130.675751, 3.64999986, 28.8408127, -0.998474836, -6.9001394e-06, -0.0552096367, -3.6029794e-06, 1, -5.98202641e-05, 0.0552096367, -5.95301099e-05, -0.998474836)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("La Fancy", "Teleports you to La Fancy.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(169.192566, 3.64999986, 349.871399, 0.0243042372, -1.10551412e-07, 0.999704599, 1.82103221e-08, 1, 1.10141357e-07, -0.999704599, 1.55280411e-08, 0.0243042372)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Mercy Hospital", "Teleports you to Mercy Hospital.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(419.943024, 7.74999714, 381.50766, 0.995683372, -2.43482052e-08, 0.0928151831, 9.76411307e-09, 1, 1.57584552e-07, -0.0928151831, -1.55998066e-07, 0.995683372)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Department Of Motor Vehicles", "Teleports you to Department Of Motor Vehicles.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(389.768982, 3.64999986, 26.904417, -0.999635935, -1.35478579e-08, -0.0269791335, -1.1631931e-08, 1, -7.11719892e-08, 0.0269791335, -7.08322645e-08, -0.999635935)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("House Of the Sun", "Teleports you to House Of The Sun.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-596.228882, 3.70999885, -76.6086807, -0.114995845, 8.83815858e-07, 0.993366122, 1.86932407e-08, 1, -8.87554449e-07, -0.993366122, -8.34958627e-08, -0.114995845)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Clumpo's Pawn Shop", "Teleports you to Clumpo's Pawn Shop.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-416.938812, 3.64999986, -107.701965, -0.039350979, 6.79785259e-08, 0.999225438, -3.58003263e-08, 1, -6.94410929e-08, -0.999225438, -3.85051706e-08, -0.039350979)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("BT&T Phone Store", "Teleports you to BT&T Phone Store.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-409.69043, 3.64999986, -38.2171783, -0.186191499, -1.07593841e-07, 0.982513487, 3.33132699e-09, 1, 1.10140071e-07, -0.982513487, 2.37802187e-08, -0.186191499)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	TeleportSection:NewButton("Fuego'z", "Teleports you to Fuego'z.", function(s)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-272.147125, 3.64999986, -38.0164299, -0.151169896, -2.00198151e-08, 0.988507807, -1.13426157e-08, 1, 1.85179658e-08, -0.988507807, -8.41290504e-09, -0.151169896)
+		local pl = game.Players.LocalPlayer.Character.HumanoidRootPart
+		local humanoid = game.Players.LocalPlayer.Character.Humanoid
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		wait(0.1)
+		print("Clicked")
+	end)
+	--DISCORD
+	local InfoSection = Info:NewSection("One of the best East Brickton scripts out.")
+	InfoSection:NewLabel("Join the discord : https://discord.gg/jTKAR4jWnF")
+	
+end
+
